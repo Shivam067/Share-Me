@@ -11,6 +11,6 @@ import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
 import Protected from "./AuthLayout.jsx";
 import RTE from "./RTE.jsx";
-import PostForm from "./PostForm/PostForm.jsx";
+import PostForm from "./postForm/PostForm.jsx";
 
 export {Header, Footer, Container, Logo, LogoutBtn, Button, Input, Select, PostCard, Login, Signup, Protected, RTE, PostForm}
