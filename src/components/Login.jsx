@@ -1,9 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "../Appwrite/Auth";
+import authService from "../Appwrite/Auth.js";
 import { useState } from "react";
-import { Input, Button, Logo } from "./index"
-import { login as storeLogin } from "../store/AuthSlicer";
+import { Input, Button, Logo } from "./index.js"
+import { login as storeLogin } from "../store/AuthSlicer.js";
 import { useDispatch } from "react-redux";
 import {useForm} from "react-hook-form"
 

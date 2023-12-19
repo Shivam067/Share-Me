@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import databaseService from "../Appwrite/Conf";
+import databaseService from "../Appwrite/Conf.js";
 
 function PostCard({$id, title, image}){
 

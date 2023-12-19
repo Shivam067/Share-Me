@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Input, RTE, Select } from "../index";
-import databaseService from "../../Appwrite/Conf";
+import { Button, Input, RTE, Select } from "../index.js";
+import databaseService from "../../Appwrite/Conf.js";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addPost, updateMyPost } from "../../store/PostSlicer";
+import { addPost, updateMyPost } from "../../store/PostSlicer.js";
 
 export default function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } =

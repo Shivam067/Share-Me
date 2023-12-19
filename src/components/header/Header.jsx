@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Container, Logo, LogoutBtn } from "../index";
+import { Logo, LogoutBtn } from "../index.js";
 import { Link } from "react-router-dom";
 import { useNavigate, NavLink } from "react-router-dom";
 
@@ -51,12 +51,13 @@ function Header(){
                     {navItems.map((item)=>{
                         return item.isActive ? (
                             <NavLink
+                            key={item.name}
                             to={item.path}
                             className={({isActive})=>{
                                 return `inline-bock px-6 py-2 duration-200 hover:bg-slate-100 hover:text-gray-600 rounded-full ${isActive ? 'bg-slate-100 text-gray-600' : ""}`
                             }}
                             >
-                                <li key={item.name}>
+                                <li >
                                     {item.name}
                                 </li>
                             </NavLink>

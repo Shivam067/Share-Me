@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import authService from './Appwrite/Auth'
-import { login, logout } from './store/AuthSlicer'
+import authService from './Appwrite/Auth.js'
+import { login, logout } from './store/AuthSlicer.js'
 import { Footer, Header } from './components'
 import { Outlet } from 'react-router-dom'
 
-import { addAllPosts } from './store/PostSlicer'
-import databaseService from './Appwrite/Conf'
+import { addAllPosts } from './store/PostSlicer.js'
+import databaseService from './Appwrite/Conf.js'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
