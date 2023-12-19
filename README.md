@@ -10,7 +10,7 @@ This is a sample Blog Web App that allows users to create and share blogs along 
 
 ## Deployment
 
-This project is already deloyed on Netlify.  Access the live web app [here](https://share-naytyi3ic-shivam-guptas-projects-2eb1650a.vercel.app/).
+This project is already deloyed on Netlify.  Access the live web app [here](https://share-me-ashen.vercel.app/).
 
 ## Features
 List the key features of your project. For example:
