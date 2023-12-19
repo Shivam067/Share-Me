@@ -18,7 +18,7 @@ function Home() {
             .catch((error)=>{
                 console.log(error)
             })
-        }, [])
+    }, [])
 
     const posts = useSelector((state) => state.post.allPosts)
     useEffect(() => {
@@ -47,9 +47,11 @@ function Home() {
             <Container>
                 <div className='flex flex-wrap'>
                     {posts.map((post) => (
+                        post.status==='active' ?
                         <div key={post.$id} className='p-2 lg:w-1/4 md:w-1/2 sm:w-full'>
                             <PostCard {...post} />
                         </div>
+                        : null
                     ))}
                 </div>
             </Container>

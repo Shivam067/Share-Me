@@ -86,7 +86,7 @@ export class DatabaseService{
             return await this.database.listDocuments(
                 config.appwriteDatabaseID,
                 config.appwriteCollectionID,
-                queries,
+                // queries,
             )
         } catch (error) {
             console.log(error);

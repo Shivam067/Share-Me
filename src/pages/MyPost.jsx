@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import { Container, PostCard } from '../components'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { addAllPosts } from '../store/PostSlicer'
+import databaseService from '../Appwrite/Conf'
 
 function MyPosts() {
     const [posts, setPosts] = useState([])
@@ -8,6 +10,19 @@ function MyPosts() {
     const userData = useSelector((state) => state.auth.userData);
     useEffect(() => {}, [])
 
+    const dispatched = useDispatch()
+
+    useEffect(()=>{
+        databaseService.getAllPost()
+        .then((res)=>{
+        if(res){
+            dispatched(addAllPosts(res.documents))
+        }
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    }, [])
     const allPosts = useSelector((state) => state.post.allPosts)
 
     useEffect(() => {

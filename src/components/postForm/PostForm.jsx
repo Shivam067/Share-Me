@@ -40,10 +40,9 @@ export default function PostForm({ post }) {
                 image: file ? file.$id : undefined,
             });
 
-
-
             if (dbPost) {
                 const id = post.$id;
+                console.log(dbPost)
                 dispatch(updateMyPost(dbPost, id))
                 setIsLoading(false)
 
