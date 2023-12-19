@@ -1,21 +1,23 @@
 import React, {useState, useEffect} from 'react'
 import { Container, PostCard } from '../components'
-import databaseService from '../Appwrite/Conf'
 import { useSelector } from 'react-redux'
 
 function MyPosts() {
     const [posts, setPosts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const userData = useSelector((state) => state.userData);
+    const userData = useSelector((state) => state.auth.userData);
     useEffect(() => {}, [])
-    databaseService.getMyPost({userData}).then((posts) => {
-        if (posts) {
-            setPosts(posts.documents)
+
+    const allPosts = useSelector((state) => state.post.allPosts)
+
+    useEffect(() => {
+        if(allPosts.length > 0){
+            const myPosts = allPosts.filter((post) => post.userID === userData.$id)
+            setPosts(myPosts)
+            setIsLoading(false)
         }
-    })
-    .finally(() => {
-        setIsLoading(false)
-    })
+    }, [allPosts])
+
     if(isLoading){
         return (
             <div className="w-full py-8 mt-4 text-center">

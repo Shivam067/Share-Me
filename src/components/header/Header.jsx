@@ -6,7 +6,7 @@ import { useNavigate, NavLink } from "react-router-dom";
 
 function Header(){
 
-    const isAuth = useSelector((state)=> state.status)
+    const isAuth = useSelector((state)=> state.auth.status)
 
     const navigate = useNavigate();
 
@@ -41,7 +41,6 @@ function Header(){
 
   return (
     <header>
-        {/* <Container> */}
             <div className="flex justify-between bg-[#1B1B1B] p-2 text-white">
                 <div>
                     <Link to="/">
@@ -51,22 +50,16 @@ function Header(){
                 <ul className='flex gap-1 items-center'>
                     {navItems.map((item)=>{
                         return item.isActive ? (
-                            <li key={item.name}>
-                                {/* <button 
-                                className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
-                                onClick={()=> navigate(item.path)}
-                                >
+                            <NavLink
+                            to={item.path}
+                            className={({isActive})=>{
+                                return `inline-bock px-6 py-2 duration-200 hover:bg-slate-100 hover:text-gray-600 rounded-full ${isActive ? 'bg-slate-100 text-gray-600' : ""}`
+                            }}
+                            >
+                                <li key={item.name}>
                                     {item.name}
-                                </button> */}
-                                <NavLink
-                                to={item.path}
-                                className={({isActive})=>{
-                                    return `inline-bock px-6 py-2 duration-200 hover:bg-slate-100 hover:text-gray-600 rounded-full ${isActive ? 'bg-slate-100 text-gray-600' : ""}`
-                                }}
-                                >
-                                    {item.name}
-                                </NavLink>
-                            </li>
+                                </li>
+                            </NavLink>
                         ) : null
                     })}
                     {isAuth && (
@@ -77,7 +70,6 @@ function Header(){
                     )}
                 </ul>
             </div>
-        {/* </Container> */}
     </header>
     
   );

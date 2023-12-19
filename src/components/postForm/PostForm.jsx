@@ -1,9 +1,10 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "../index";
 import databaseService from "../../Appwrite/Conf";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addPost, updateMyPost } from "../../store/PostSlicer";
 
 export default function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } =
@@ -16,10 +17,15 @@ export default function PostForm({ post }) {
             },
         });
 
+    const dispatch = useDispatch();
+
+    const [isLoading, setIsLoading] = useState(false)
+
     const navigate = useNavigate();
-    const userData = useSelector((state) => state.userData);
+    const userData = useSelector((state) => state.auth.userData);
 
     const submit = async (data) => {
+        setIsLoading(true)
         if (post) {
             const file = data.image[0]
                 ? await databaseService.uploadImage(data.image[0])
@@ -34,7 +40,13 @@ export default function PostForm({ post }) {
                 image: file ? file.$id : undefined,
             });
 
+
+
             if (dbPost) {
+                const id = post.$id;
+                dispatch(updateMyPost(dbPost, id))
+                setIsLoading(false)
+
                 navigate(`/post/${dbPost.$id}`);
             }
         } else {
@@ -50,6 +62,8 @@ export default function PostForm({ post }) {
                 });
 
                 if (dbPost) {
+                    dispatch(addPost(dbPost))
+                    setIsLoading(false)
                     navigate(`/post/${dbPost.$id}`);
                 }
             }
@@ -78,7 +92,19 @@ export default function PostForm({ post }) {
         return () => subscription.unsubscribe();
     }, [watch, slugTransform, setValue]);
 
-    return (
+    return isLoading ? (
+        <div className="w-full py-8 mt-4 text-center">
+                <div className="flex flex-wrap">
+                    <div className="p-2 w-full">
+                        <h1 className="text-2xl font-bold hover:text-gray-500">
+                            Loading...
+                        </h1>
+                    </div>
+                </div>
+        </div>
+    ) :
+    
+    (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-2/3 px-2">
                 <Input

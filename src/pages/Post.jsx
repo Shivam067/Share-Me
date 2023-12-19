@@ -3,30 +3,33 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import databaseService from "../Appwrite/Conf";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteMyPost } from "../store/PostSlicer";
 
 export default function Post() {
     const [post, setPost] = useState(null);
+
+    const dispatch = useDispatch();
+    const posts = useSelector((state) => state.post.allPosts)
+
     const { slug } = useParams();
     const navigate = useNavigate();
 
-    const userData = useSelector((state) => state.userData);
+    const userData = useSelector((state) => state.auth.userData);
 
     const isAuthor = post && userData ? post.userID === userData.$id : false;
 
     useEffect(() => {
         if (slug) {
-            databaseService.getPost(slug).then((post) => {
-                if (post) setPost(post);
-                else navigate("/");
-            });
+            setPost(posts.find((post) => post.$id === slug))
         } else navigate("/");
-    }, [slug, navigate]);
+    }, [slug, navigate, posts]);
 
     const deletePost = () => {
         databaseService.deletePost(post.$id).then((status) => {
             if (status) {
                 databaseService.deleteImage(post.image);
+                dispatch(deleteMyPost(post.$id))
                 navigate("/");
             }
         });
@@ -34,8 +37,14 @@ export default function Post() {
 
     return post ? (
         <div className="py-8">
-            <Container>
-                <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
+            <Container className="lg:w-2/4 md:w-3/4 w-full">
+                <div className="w-full mb-6">
+                    <h1 className="text-4xl font-bold">{post.title}</h1>
+                </div>
+                <div className="browser-css text-xl mb-6">
+                    {parse(post.content)}
+                </div>
+                <div className="w-full mx-auto flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
                         src={databaseService.getFilePreview(post.image)}
                         alt={post.title}
@@ -55,12 +64,6 @@ export default function Post() {
                         </div>
                     )}
                 </div>
-                <div className="w-full mb-6">
-                    <h1 className="text-2xl font-bold">{post.title}</h1>
-                </div>
-                <div className="browser-css">
-                    {parse(post.content)}
-                    </div>
             </Container>
         </div>
     ) : (<div className="w-full py-8 mt-4 text-center">

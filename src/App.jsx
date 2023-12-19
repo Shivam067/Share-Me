@@ -5,6 +5,9 @@ import { login, logout } from './store/AuthSlicer'
 import { Footer, Header } from './components'
 import { Outlet } from 'react-router-dom'
 
+import { addAllPosts } from './store/PostSlicer'
+import databaseService from './Appwrite/Conf'
+
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const dispatched = useDispatch()
@@ -23,6 +26,18 @@ function App() {
     })
   }, [])
 
+  useEffect(()=>{
+    databaseService.getAllPost()
+    .then((res)=>{
+      if(res){
+        console.log(res.documents)
+        dispatched(addAllPosts(res.documents))
+      }
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  }, [])
 
     return !isLoading ? (
       <div className='min-h-screen flex flex-wrap content-between bg-[#000000] text-white'>

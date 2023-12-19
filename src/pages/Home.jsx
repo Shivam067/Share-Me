@@ -1,56 +1,31 @@
 import React, {useEffect, useState} from 'react'
 import databaseService from '../Appwrite/Conf'
 import {Container, PostCard} from '../components'
+import { useDispatch, useSelector } from 'react-redux'
+import { addAllPosts } from '../store/PostSlicer'
 
 function Home() {
-    const [posts, setPosts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState(null)
+    const dispatched = useDispatch()
 
-    // without loading sign
-
-    // useEffect(() => {
-    //     databaseService.getAllPost([]).then((posts) => {
-    //         if (posts) {
-    //             // console.log(posts)
-    //             setPosts(posts.documents)
-    //         }
-    //     })
-    // }, [])
-
-    // with loading sign but error is not deal
-
-    // useEffect(() => {
-    //     async function fetchPosts() {
-    //         try {
-    //             const posts = await databaseService.getAllPost([])
-    //             if (posts) {
-    //                 setPosts(posts.documents)
-    //                 setIsLoading(false)
-    //             }
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     fetchPosts()
-    // }
-    //     , [])
-
-    // perfect
-
-    useEffect(() => {
-        databaseService.getAllPost().then((posts) => {
-            if (posts) {
-                // console.log(posts)
-                setPosts(posts.documents)
+    useEffect(()=>{
+            databaseService.getAllPost()
+            .then((res)=>{
+            if(res){
+                dispatched(addAllPosts(res.documents))
             }
-        })
-        .catch((error)=>{
-            console.log(error)
-            setError(error)
-        })
-        .finally(()=>{setIsLoading(false)})
-    }, [])
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        }, [])
+
+    const posts = useSelector((state) => state.post.allPosts)
+    useEffect(() => {
+        if(posts.length > 0){
+            setIsLoading(false)
+        }
+    }, [posts])
 
     if (isLoading) {
         return (
@@ -67,25 +42,12 @@ function Home() {
             </div>
         )
     }
-    else if(error) return (
-        <div className="w-full py-8 mt-4 text-center">
-            <Container>
-                <div className="flex flex-wrap">
-                    <div className="p-2 w-full">
-                        <h1 className="text-2xl font-bold hover:text-gray-500">
-                            {error}
-                        </h1>
-                    </div>
-                </div>
-            </Container>
-        </div>
-    )
     else return (
         <div className='w-full py-8'>
             <Container>
                 <div className='flex flex-wrap'>
                     {posts.map((post) => (
-                        <div key={post.$id} className='p-2 w-1/4'>
+                        <div key={post.$id} className='p-2 lg:w-1/4 md:w-1/2 sm:w-full'>
                             <PostCard {...post} />
                         </div>
                     ))}
