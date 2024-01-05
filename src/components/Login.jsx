@@ -9,7 +9,7 @@ import {useForm} from "react-hook-form"
 
 function Login(){
     const dispatch = useDispatch()
-    const [error, setError] = useState(null)
+    const [error, setError] = useState('')
     // register is just a keyword which stores data in the form of key object type pair.
     // handleSubmit is a function which is used to handle the submit event of the form.
     const {register, handleSubmit} = useForm()
@@ -23,6 +23,9 @@ function Login(){
                 const userData = await authService.currentSession()
                 if(userData) dispatch(storeLogin(userData))
                 navigate("/")
+            }
+            else{
+                setError("Please enter valid credentials")
             }
         } catch (error) {
             setError(error.message)

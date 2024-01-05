@@ -13,7 +13,7 @@ function Signup() {
     const {register, handleSubmit} = useForm()
 
     // async function create(data) {
-        const create = async(data) => {
+    const create = async(data) => {
         // console.log(data)
         setError("")
         try {
@@ -22,6 +22,9 @@ function Signup() {
                 const userData = await authService.currentSession()
                 if(userData) dispatch(login(userData));
                 navigate("/")
+            }
+            else{
+                setError("Password must be at least 8 characters long")
             }
         } catch (error) {
             setError(error.message)

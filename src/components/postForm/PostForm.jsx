@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "../index.js";
 import databaseService from "../../Appwrite/Conf.js";
@@ -17,7 +17,18 @@ export default function PostForm({ post }) {
             },
         });
 
+    const [isTitleAvailable, setIsTitleAvailable] = useState(false);
+
+    useEffect(()=>{
+        if(post)
+        {
+            setIsTitleAvailable(true)
+        }
+    }, [])
+
     const dispatch = useDispatch();
+
+    const [error, setError] = useState("");
 
     const [isLoading, setIsLoading] = useState(false)
 
@@ -25,6 +36,12 @@ export default function PostForm({ post }) {
     const userData = useSelector((state) => state.auth.userData);
 
     const submit = async (data) => {
+        if(data.slug != post.$id || data.title != post.title)
+        {
+            data.title=post.title
+            setError("Title cannot be changed")
+            return
+        }
         setIsLoading(true)
         if (post) {
             const file = data.image[0]
@@ -104,18 +121,22 @@ export default function PostForm({ post }) {
     ) :
     
     (
+    <>
+        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-2/3 px-2">
                 <Input
                     label="Title :"
                     placeholder="Title"
                     className="mb-4 bg-[#222f3e] text-slate-100"
+                    readOnly={isTitleAvailable}
                     {...register("title", { required: true })}
                 />
                 <Input
                     label="Slug :"
                     placeholder="Slug"
                     className="mb-4 bg-[#222f3e] text-slate-100"
+                    readOnly='true'
                     {...register("slug", { required: true })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), {
@@ -162,5 +183,6 @@ export default function PostForm({ post }) {
                 </Button>
             </div>
         </form>
+    </>
     );
 }
